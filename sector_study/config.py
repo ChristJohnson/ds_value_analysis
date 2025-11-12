@@ -18,6 +18,8 @@ KAGGLE_DATASETS = [
 
 HF_DATASETS = [
     "yeong-hwan/ticker-sector-industry",
+    "Adilbai/stock-dataset",
+    "kurry/sp500_earnings_transcripts",
 ]
 
 # Paths
@@ -42,7 +44,9 @@ try:
 
     logger.remove(0)
     logger.add(
-        lambda msg: tqdm.write(msg, end=""), colorize=True, level="TRACE" if DEV else "INFO"
+        lambda msg: tqdm.write(msg, end=""),
+        colorize=True,
+        level="TRACE" if DEV else "INFO",
     )
 except ModuleNotFoundError:
     pass

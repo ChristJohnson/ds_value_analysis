@@ -6,6 +6,22 @@
 
 Analysis of relationship between index fund sectors and financial news coverage.
 
+## Progress
+
+- [x] Complete [requirements.txt](./requirements.txt)
+- [x] Set up virtual environment
+- [x] Data install
+- [ ] Hypothesis assertions
+- [ ] Data cleaning
+  - [ ] date-time standardization
+  - [ ] {maybe} source stock prices 2018-2020
+- [x] Exploratory data analysis
+- [ ] Data pipelines
+- [ ] Statistical analysis
+  - [ ] independent variable definitions
+- [ ] Feature analysis
+- [ ] Feature creation
+
 ## Project Organization
 
 ```
@@ -26,7 +42,7 @@ Analysis of relationship between index fund sectors and financial news coverage.
 │                         the creator's initials, and a short `-` delimited description, e.g.
 │                         `1.0-jqp-initial-data-exploration`.
 │
-├── pyproject.toml     <- Project configuration file with package metadata for 
+├── pyproject.toml     <- Project configuration file with package metadata for
 │                         sector_study and configuration for tools like black
 │
 ├── references         <- Data dictionaries, manuals, and all other explanatory materials.
@@ -49,13 +65,38 @@ Analysis of relationship between index fund sectors and financial news coverage.
     │
     ├── features.py             <- Code to create features for modeling
     │
-    ├── modeling                
-    │   ├── __init__.py 
-    │   ├── predict.py          <- Code to run model inference with trained models          
+    ├── modeling
+    │   ├── __init__.py
+    │   ├── predict.py          <- Code to run model inference with trained models
     │   └── train.py            <- Code to train models
     │
     └── plots.py                <- Code to create visualizations
 ```
 
---------
+---
 
+# Using the Repo
+
+## Data Sources
+
+Data used can be sourced from:
+
+- [thedevastator/cnbc-business-and-financial-news-dataset-450k](https://www.kaggle.com/datasets/thedevastator/cnbc-business-and-financial-news-dataset-450k)
+- [notlucasp/financial-news-headlines](https://www.kaggle.com/datasets/notlucasp/financial-news-headlines)
+- [camnugent/sandp500](https://www.kaggle.com/datasets/camnugent/sandp500)
+- [amananandrai/ag-news-classification-dataset](https://www.kaggle.com/datasets/amananandrai/ag-news-classification-dataset)
+- [yeong-hwan/ticker-sector-industry](https://huggingface.co/datasets/yeong-hwan/ticker-sector-industry)
+- [Adilbai/stock-dataset](https://huggingface.co/datasets/Adilbai/stock-dataset)
+- {unused} [kurry/sp500_earnings_transcripts](https://huggingface.co/datasets/kurry/sp500_earnings_transcripts)
+
+Place the csv files into `data/external/` and the `dataset.py` file should be able to prepare the data for this repository.
+
+## Data Pipelines
+
+Data pipelines can be viewed via the terminal (after activating the virtual environment) using
+
+```
+python sector_study/datasets.py --help
+```
+
+Further documentation about each pipeline is provided through the command-line toolset provided by the `typer` library. Implementation is still a work-in-progress.
