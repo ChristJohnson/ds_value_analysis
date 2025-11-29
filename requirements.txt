@@ -8,4 +8,5 @@ typer
 kagglehub
 pandas
 datasets
+scikit-learn
 -e .

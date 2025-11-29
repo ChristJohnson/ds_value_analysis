@@ -13,6 +13,7 @@ import typer
 from sector_study.config import (
     EXTERNAL_DATA_DIR,
     HF_DATASETS,
+    INTERIM_DATA_DIR,
     KAGGLE_DATASETS,
     PROCESSED_DATA_DIR,
     RAW_DATA_DIR,
@@ -41,26 +42,31 @@ def main(
 @app.command()
 def combine_datasets():
     combine_headlines()
-    combine_datasets()
+    combine_stocks()
 
 
+@app.command()
 def combine_headlines():
-    headlines = pd.read_csv(RAW_DATA_DIR.joinpath("headlines.csv"))
-    headlines.to_csv(PROCESSED_DATA_DIR.joinpath("headlines.csv"))
+    headlines = pd.read_csv(RAW_DATA_DIR.joinpath("headlines.csv"), index_col=0)
+    headlines.to_csv(INTERIM_DATA_DIR.joinpath("headlines.csv"))
 
 
+@app.command()
 def combine_stocks():
     all_stocks_5yr = pd.read_csv(RAW_DATA_DIR.joinpath("all_stocks_5yr.csv"))
     all_stocks_5yr.date = pd.to_datetime(all_stocks_5yr.date, utc=True)
     stock_dataset = pd.read_csv(RAW_DATA_DIR.joinpath("stock_dataset.csv"))
-    sector_industry = pd.read_csv(
-        RAW_DATA_DIR.joinpath("sector_industry_info.csv")
-    )
+    # sector_industry = pd.read_csv(
+    #     RAW_DATA_DIR.joinpath("sector_industry_info.csv")
+    # )
 
     df = pd.concat([all_stocks_5yr, stock_dataset])
     df.date = pd.to_datetime(df.date)
 
-    df = pd.merge(df, sector_industry, on="ticker")
+    # df = pd.merge(df, sector_industry, on="ticker")
+    logger.info(
+        f"unique tickers: {len(df['ticker'].unique())}\n{df['ticker'].unique()}"
+    )
 
     df.to_csv(PROCESSED_DATA_DIR.joinpath("stocks.csv"), index=False)
 
@@ -93,7 +99,6 @@ def clean_cnbc_news_datase():
     )
 
     df.columns = [
-        "index",
         "headline",
         "url",
         "date",
@@ -245,21 +250,24 @@ def clean_news_classification():
         ]
     )
 
-    df.to_csv(PROCESSED_DATA_DIR.joinpath("test_train.csv"), index=False)
+    df.to_csv(INTERIM_DATA_DIR.joinpath("test_train.csv"), index=False)
 
 
+@app.command()
 def clean_sector_industry_info():
-    df = pd.read_csv(EXTERNAL_DATA_DIR.joinpath("sector_industry_info.csv"))
+    df = pd.read_csv(
+        EXTERNAL_DATA_DIR.joinpath("sector_industry_info.csv"), index_col=0
+    )
     interested_columns = ["Ticker", "Sector", "Industry"]
     df = df[interested_columns]
     df.columns = ["ticker", "sector", "industry"]
-    df.to_csv(RAW_DATA_DIR.joinpath("sector_industry_info.csv"), index=False)
+    df = df.set_index("ticker")
+    df.to_csv(RAW_DATA_DIR.joinpath("sector_industry_info.csv"), index=True)
 
 
 # WARN: This one kinda chugs
 def clean_earnings_transcript():
     df = pd.read_csv(EXTERNAL_DATA_DIR.joinpath("earnings_transcripts.csv"))
-    df.to_csv(RAW_DATA_DIR.joinpath("earnings_transcripts.csv"))
 
     interested_rows = [
         "symbol",
@@ -288,7 +296,7 @@ def clean_earnings_transcript():
         ["kurry/sp500_earnings_transcripts" for _ in range(df.shape[0])]
     )
 
-    df.to_csv(PROCESSED_DATA_DIR.joinpath("earnings_transcripts.csv"))
+    df.to_csv(INTERIM_DATA_DIR.joinpath("earnings_transcripts.csv"))
 
 
 @app.command()

@@ -12,11 +12,11 @@ Analysis of relationship between index fund sectors and financial news coverage.
 - [x] Set up virtual environment
 - [x] Data install
 - [ ] Hypothesis assertions
-- [ ] Data cleaning
-  - [ ] date-time standardization
-  - [ ] {maybe} source stock prices 2018-2020
+- [x] Data cleaning
+  - [x] date-time standardization
+  - [x] {maybe} source stock prices 2018-2020
 - [x] Exploratory data analysis
-- [ ] Data pipelines
+- [x] Data pipelines
 - [ ] Statistical analysis
   - [ ] independent variable definitions
 - [ ] Feature analysis
