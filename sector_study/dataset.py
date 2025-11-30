@@ -266,6 +266,7 @@ def clean_sector_industry_info():
 
 
 # WARN: This one kinda chugs
+@app.command()
 def clean_earnings_transcript():
     df = pd.read_csv(EXTERNAL_DATA_DIR.joinpath("earnings_transcripts.csv"))
 
@@ -275,7 +276,7 @@ def clean_earnings_transcript():
         "year",
         "date",
         "content",
-        "structured_content",
+        # "structured_content",
         "company_name",
         "company_id",
     ]
@@ -287,7 +288,7 @@ def clean_earnings_transcript():
         "year",
         "date",
         "content",
-        "structured_content",
+        # "structured_content",
         "company_name",
         "company_id",
     ]
@@ -296,7 +297,9 @@ def clean_earnings_transcript():
         ["kurry/sp500_earnings_transcripts" for _ in range(df.shape[0])]
     )
 
-    df.to_csv(INTERIM_DATA_DIR.joinpath("earnings_transcripts.csv"))
+    df.to_csv(
+        INTERIM_DATA_DIR.joinpath("earnings_transcripts.csv"), index=False
+    )
 
 
 @app.command()
